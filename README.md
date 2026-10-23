@@ -6,15 +6,13 @@ How It Works
 
 The detector combines two models and averages their predicted probabilities.
 
-1. Random Forest on handcrafted features. Each URL is converted into 18 numeric features, including:
-
-URL, host, path, and query length
-Counts of dots, hyphens, digits, and special characters
-Subdomain count, whether the host is an IP address, and whether an @ symbol is present
-HTTPS use, double slashes in the path, and URL shorteners
-Suspicious keywords such as "login", "verify", "secure", and "paypal"
-Shannon entropy of the URL and the host, since random-looking domains score higher
-
+1. **Random Forest on handcrafted features.** Each URL is converted into 17 numeric features, including:
+   - URL, host, path, and query length
+   - Counts of dots, hyphens, digits, and special characters
+   - Subdomain count, whether the host is an IP address, and whether an `@` symbol is present
+   - HTTPS use, double slashes in the path, and URL shorteners
+   - Suspicious keywords such as "login", "verify", "secure", and "paypal"
+   - Shannon entropy of the URL and the host
 2. Logistic regression on character n-grams. Character 3- to 5-grams are weighted with TF-IDF, so the model learns recurring fragments of phishing URLs without relying on hand-picked rules.
 
 Threshold selection. The data is split 60% training, 20% validation, and 20% test. The decision threshold is chosen on the validation set: it is the highest-recall point where precision is at least 0.85. If no point reaches that precision, the threshold with the best F1 score is used. The test set is used only for the final evaluation, so the reported numbers are not tuned on it.
